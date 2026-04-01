@@ -71,7 +71,13 @@ function createActivity_(activity) {
     normalized.id = Utilities.getUuid();
   }
 
-  sheet.appendRow(mapActivityToRow_(normalized));
+  const row = mapActivityToRow_(normalized);
+  // Prevent Google Sheets from auto-converting time/date strings to Date objects
+  // by prefixing with apostrophe (forces text format)
+  row[1] = "'" + row[1];  // date
+  row[2] = "'" + row[2];  // time
+
+  sheet.appendRow(row);
   return normalized;
 }
 
@@ -83,8 +89,14 @@ function updateActivity_(activity) {
     throw new Error('Activity ID is required for update.');
   }
 
+  const row = mapActivityToRow_(normalized);
+  // Prevent Google Sheets from auto-converting time/date strings to Date objects
+  // by prefixing with apostrophe (forces text format)
+  row[1] = "'" + row[1];  // date
+  row[2] = "'" + row[2];  // time
+
   const rowIndex = findRowById_(sheet, normalized.id);
-  sheet.getRange(rowIndex, 1, 1, 7).setValues([mapActivityToRow_(normalized)]);
+  sheet.getRange(rowIndex, 1, 1, 7).setValues([row]);
   return normalized;
 }
 
