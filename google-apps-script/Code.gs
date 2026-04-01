@@ -1,6 +1,10 @@
 const SPREADSHEET_ID = '1PrNCGIfQWE5hRR34Aobd1rDNh04NmqWO5i7eLu_Mn9Y';
 const SHEET_NAME = 'База';
 const HEADER_ROW = ['ID', 'Дата мероприятия', 'Время мероприятия', 'Название', 'Участник', 'Объекты', 'Тип'];
+// Часовой пояс таблицы — Новосибирск (UTC+7).
+// Все даты и времена форматируются в этом поясе, чтобы все пользователи
+// видели одинаковое время независимо от часового пояса их браузера.
+const TIMEZONE = 'Asia/Novosibirsk';
 
 function doGet(e) {
   try {
@@ -149,11 +153,35 @@ function normalizeEventType_(value) {
   return normalized === 'external' || normalized === 'внешнее' ? 'внешнее' : 'внутреннее';
 }
 
+function formatDateCell_(value) {
+  if (!value) return '';
+  if (value instanceof Date) {
+    return Utilities.formatDate(value, TIMEZONE, 'dd.MM.yyyy');
+  }
+  var str = String(value).trim();
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(str)) return str;
+  return str;
+}
+
+function formatTimeCell_(value) {
+  if (!value) return '';
+  if (value instanceof Date) {
+    // Extract hours and minutes directly from Date object using script timezone
+    // (which should match the spreadsheet timezone for correct time values)
+    var h = value.getHours();
+    var m = value.getMinutes();
+    return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+  }
+  var str = String(value).trim();
+  if (/^\d{2}:\d{2}(:\d{2})?$/.test(str)) return str.slice(0, 5);
+  return str;
+}
+
 function mapRowToActivity_(row) {
   return {
     id: String(row[0] || ''),
-    date: String(row[1] || ''),
-    time: String(row[2] || ''),
+    date: formatDateCell_(row[1]),
+    time: formatTimeCell_(row[2]),
     name: String(row[3] || ''),
     person: String(row[4] || ''),
     objects: String(row[5] || ''),
