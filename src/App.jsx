@@ -56,7 +56,6 @@ function App() {
     isLoading,
     isSaving,
     syncError,
-    storageMode,
     getActivitiesForMonth,
     getActivitiesForDate,
     addActivity,
@@ -161,14 +160,25 @@ function App() {
 
   const statusText = syncError
     ? syncError
-    : storageMode === 'google-sheets'
-      ? 'Данные синхронизируются с Google Sheets.'
-      : 'Сейчас приложение работает локально. Для синхронизации укажите VITE_SHEETS_API_URL.';
+    : 'Данные синхронизируются с Google Sheets.';
+
+  const statusToneClass = isLoading
+    ? 'sync-status--loading'
+    : syncError
+      ? 'sync-status--error'
+      : 'sync-status--success';
 
   return (
     <div className="container">
-      <div className={`sync-status ${syncError ? 'sync-status--error' : ''}`}>
-        {isLoading ? 'Загрузка активностей...' : statusText}
+      <div
+        className={`sync-status ${statusToneClass}`}
+        aria-live="polite"
+        title={isLoading ? 'Загрузка активностей...' : statusText}
+      >
+        <span className="sync-status__icon" aria-hidden="true"></span>
+        <span className="sync-status__text">
+          {isLoading ? 'Загрузка активностей...' : statusText}
+        </span>
       </div>
 
       <Calendar
