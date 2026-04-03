@@ -56,13 +56,16 @@
 .sync-status__text {
   min-width: 0;
   white-space: nowrap;
+  max-width: 0;
+  overflow: hidden;
   opacity: 0;
   transform: translateX(10px);
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  transition: max-width 0.22s ease, opacity 0.22s ease, transform 0.22s ease;
 }
 
 .sync-status:hover .sync-status__text,
 .sync-status--expanded .sync-status__text {
+  max-width: 260px;
   opacity: 1;
   transform: translateX(0);
 }
@@ -363,7 +366,8 @@
 .activities-list {
   flex: 1;
   overflow-y: auto;
-  padding-right: 8px;
+  padding-right: 0;
+  scrollbar-gutter: stable;
 }
 
 .activities-list::-webkit-scrollbar {
@@ -386,7 +390,7 @@
   padding: 14px;
   border-radius: 14px;
   margin-bottom: 10px;
-  border-left: 4px solid transparent;
+  border-left: 1px solid transparent;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04),
               inset 0 1px 0 rgba(255, 255, 255, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.45);
