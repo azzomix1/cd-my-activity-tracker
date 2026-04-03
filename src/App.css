@@ -12,7 +12,7 @@
 
 .sync-status {
   position: fixed;
-  top: 50%;
+  top: calc(16px + var(--safe-area-top));
   right: 18px;
   z-index: 30;
   display: flex;
@@ -36,7 +36,8 @@
 }
 
 .sync-status:hover,
-.sync-status:focus-within {
+.sync-status:focus-within,
+.sync-status--expanded {
   width: min(360px, calc(100vw - 28px));
   box-shadow: 0 18px 38px rgba(29, 29, 31, 0.14);
 }
@@ -59,7 +60,8 @@
 }
 
 .sync-status:hover .sync-status__text,
-.sync-status:focus-within .sync-status__text {
+.sync-status:focus-within .sync-status__text,
+.sync-status--expanded .sync-status__text {
   opacity: 1;
   transform: translateX(0);
 }
@@ -176,6 +178,10 @@
 
 .btn-edit {
   background: rgba(0, 122, 255, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   padding: 0 8px;
   height: 28px;
   min-height: 28px;
@@ -191,6 +197,10 @@
 
 .btn-delete {
   background: rgba(255, 59, 48, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   padding: 0 8px;
   height: 28px;
   min-height: 28px;
@@ -249,7 +259,7 @@
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(20px);
   color: #1d1d1f;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04),
               inset 0 1px 0 rgba(255, 255, 255, 0.6);
   position: relative;
@@ -593,20 +603,21 @@
   }
 
   .sync-status {
-    top: auto;
+    top: calc(10px + var(--safe-area-top));
     right: 10px;
-    bottom: 10px;
-    width: min(300px, calc(100vw - 20px));
-    min-height: 44px;
-    padding: 8px 12px;
-    border-radius: 18px;
+    bottom: auto;
+    width: 48px;
+    min-height: 48px;
+    padding: 8px 10px;
+    border-radius: 999px;
     font-size: 12px;
     line-height: 1.25;
     gap: 10px;
   }
 
   .sync-status:hover,
-  .sync-status:focus-within {
+  .sync-status:focus-within,
+  .sync-status--expanded {
     width: min(300px, calc(100vw - 20px));
   }
 
@@ -616,10 +627,8 @@
     height: 20px;
   }
 
-  .sync-status__text {
+  .sync-status--expanded .sync-status__text {
     white-space: normal;
-    opacity: 1;
-    transform: none;
   }
 
   .calendar-section,
@@ -795,22 +804,21 @@
 /* Планшеты малые (481px - 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
   .sync-status {
-    top: auto;
+    top: calc(12px + var(--safe-area-top));
     right: 14px;
-    bottom: 14px;
-    width: min(320px, calc(100vw - 28px));
-    min-height: 48px;
+    bottom: auto;
+    width: 52px;
+    min-height: 52px;
   }
 
   .sync-status:hover,
-  .sync-status:focus-within {
+  .sync-status:focus-within,
+  .sync-status--expanded {
     width: min(320px, calc(100vw - 28px));
   }
 
-  .sync-status__text {
+  .sync-status--expanded .sync-status__text {
     white-space: normal;
-    opacity: 1;
-    transform: none;
   }
 
   .container {
@@ -978,6 +986,9 @@
 
   .day:active {
     background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transform: none;
   }
 
   .activity-item:active {

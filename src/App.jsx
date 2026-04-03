@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import Calendar from './components/Calendar';
 import ActivitiesPanel from './components/ActivitiesPanel';
 import ActivityModal from './components/ActivityModal';
@@ -18,6 +18,8 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingActivity, setEditingActivity] = useState(null);
   const [modalInstanceKey, setModalInstanceKey] = useState(0);
+  const [isStatusExpanded, setIsStatusExpanded] = useState(false);
+  const statusRef = useRef(null);
 
   // Эффект параллакса для фона
   useEffect(() => {
@@ -48,6 +50,28 @@ function App() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      if (statusRef.current && !statusRef.current.contains(event.target)) {
+        setIsStatusExpanded(false);
+      }
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setIsStatusExpanded(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, []);
 
@@ -171,9 +195,20 @@ function App() {
   return (
     <div className="container">
       <div
-        className={`sync-status ${statusToneClass}`}
+        ref={statusRef}
+        className={`sync-status ${statusToneClass} ${isStatusExpanded ? 'sync-status--expanded' : ''}`}
         aria-live="polite"
+        aria-expanded={isStatusExpanded}
+        role="button"
+        tabIndex={0}
         title={isLoading ? 'Загрузка активностей...' : statusText}
+        onClick={() => setIsStatusExpanded((prev) => !prev)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            setIsStatusExpanded((prev) => !prev);
+          }
+        }}
       >
         <span className="sync-status__icon" aria-hidden="true"></span>
         <span className="sync-status__text">
