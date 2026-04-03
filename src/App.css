@@ -12,6 +12,7 @@
 
 .sync-status {
   --sync-pill-collapsed-width: 56px;
+  --sync-pill-expanded-padding: 10px 14px;
   position: fixed;
   top: calc(16px + var(--safe-area-top));
   right: 18px;
@@ -22,7 +23,7 @@
   gap: 0;
   width: var(--sync-pill-collapsed-width);
   min-height: 56px;
-  padding: 10px 14px;
+  padding: 0;
   border-radius: 999px;
   overflow: hidden;
   background: rgba(234, 246, 236, 0.9);
@@ -39,6 +40,7 @@
 .sync-status:hover,
 .sync-status--expanded {
   width: min(360px, calc(100vw - 28px));
+  padding: var(--sync-pill-expanded-padding);
   justify-content: flex-start;
   gap: 12px;
   box-shadow: 0 18px 38px rgba(29, 29, 31, 0.14);
@@ -48,7 +50,6 @@
   flex: 0 0 28px;
   width: 28px;
   height: 28px;
-  margin: 0 auto;
   border-radius: 50%;
   background: currentColor;
   box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);
@@ -369,7 +370,7 @@
   overflow-y: auto;
   width: 100%;
   padding-right: 0;
-  scrollbar-gutter: stable;
+  scrollbar-gutter: auto;
 }
 
 .activities-list::-webkit-scrollbar {
@@ -616,12 +617,13 @@
 
   .sync-status {
     --sync-pill-collapsed-width: 48px;
+    --sync-pill-expanded-padding: 8px 12px;
     top: calc(10px + var(--safe-area-top));
     right: 10px;
     bottom: auto;
     width: var(--sync-pill-collapsed-width);
     min-height: 48px;
-    padding: 8px 10px;
+    padding: 0;
     border-radius: 999px;
     font-size: 12px;
     line-height: 1.25;
@@ -637,7 +639,7 @@
     flex-basis: 20px;
     width: 20px;
     height: 20px;
-    margin: 0 auto;
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.2);
   }
 
   .sync-status--expanded .sync-status__text {
@@ -818,11 +820,13 @@
 @media (min-width: 481px) and (max-width: 768px) {
   .sync-status {
     --sync-pill-collapsed-width: 52px;
+    --sync-pill-expanded-padding: 9px 12px;
     top: calc(12px + var(--safe-area-top));
     right: 14px;
     bottom: auto;
     width: var(--sync-pill-collapsed-width);
     min-height: 52px;
+    padding: 0;
   }
 
   .sync-status:hover,
@@ -832,10 +836,6 @@
 
   .sync-status--expanded .sync-status__text {
     white-space: normal;
-  }
-
-  .sync-status__icon {
-    margin: 0 auto;
   }
 
   .container {
@@ -1013,7 +1013,7 @@
     transform: translateX(0);
   }
 
-  .btn,
+  .btn:not(.btn-edit):not(.btn-delete),
   .day,
   .activity-item {
     min-height: 44px;
